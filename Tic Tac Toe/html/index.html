@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alata&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <title>Document</title>
+    <script>
+        $(document).ready(function(){
+            var currentPlayer= 'X';
+            var playCounter = 0;
+            
+            $("#result").hide();
+            let cells = [[0,0,0],[0,0,0],[0,0,0]];
+
+            //restart the game:
+            $("#playAgain").click(function(){
+                location.reload(true);  
+            })
+
+            // The main game:
+            $(".cell").click(function(){
+            if(!$(this).text()){
+                $(this).text(currentPlayer);
+                playCounter ++;
+                addValueToArray($(this));
+                currentPlayer = 'O';
+            }if ($(this).text() === 'O') {
+                currentPlayer = 'X';
+            }
+            
+        });
+        //Add the value to the array:
+        function addValueToArray(button) {
+            var r = $(button).attr("row");
+            var c = $(button).attr("col");
+            cells[r][c] = $(button).text();
+            console.log(cells);
+
+            if(checkTheWinner()){
+                $("#message").text("Player " + currentPlayer + " wins!")
+                $("#result").show();
+                $(".cell").addClass(" disabled");
+                return;
+
+            } if(playCounter === 9){
+                $("#message").text("It's a Draw");
+                $("#result").show();
+                $(".cell").addClass(" disabled");
+                return;
+            }
+        }
+
+        function checkTheWinner() {
+            let foundWinner = false;
+
+            // Check rows and columns
+            for (let i = 0; i < 3; i++) {
+                if (cells[i][0] !== 0 && cells[i][0] === cells[i][1] && cells[i][0] === cells[i][2]) {
+                    foundWinner = true;
+                    break;
+                }
+                if (cells[0][i] !== 0 && cells[0][i] === cells[1][i] && cells[0][i] === cells[2][i]) {
+                    foundWinner = true;
+                    break;
+                }
+            }
+
+            // Check diagonals
+            if (!foundWinner) {
+                if (cells[0][0] !== 0 && cells[0][0] === cells[1][1] && cells[0][0] === cells[2][2]) {
+                    foundWinner = true;
+                } else if (cells[0][2] !== 0 && cells[0][2] === cells[1][1] && cells[0][2] === cells[2][0]) {
+                    foundWinner = true;
+                }
+            }
+
+            return foundWinner;
+        }               
+    });
+</script>
+</head>
+    <body>
+        <!-- the game board: -->
+        <div class="container min-vh-100 ps-5 pe-5">
+            <div class="row min-vh-100 justify-content-center align-content-center">
+                
+                <h1 class="text-center text-white mb-5">Let's play some Tic-Tac-Toe!</h1>
+                <div class="row mb-5">
+                    <div class="col-4 cell-container border top-left-cell text-center"><button class="btn cell-btn cell" id="cell-1" row="0" col="0"></button></div>
+
+                    <div class="col-4 cell-container border text-center"><button class="btn cell-btn cell" id="cell-2" row="0" col="1"></button></div>
+                    
+                    <div class="col-4 cell-container border top-right-cell text-center"><button class="btn cell-btn cell" id="cell-3" row="0" col="2"></button></div>
+                    
+                    <div class="col-4 cell-container border text-center"><button class="btn cell-btn cell" id="cell-4" row="1" col="0"></button></div>
+                    
+                    <div class="col-4 cell-container border text-center"><button class="btn cell-btn cell" id="cell-5" row="1" col="1"></button></div>
+                    
+                    <div class="col-4 cell-container border text-center"><button class="btn cell-btn cell" id="cell-6" row="1" col="2"></button></div>
+                    
+                    <div class="col-4 cell-container border bottom-left-cell text-center"><button class="btn cell-btn cell" id="cell-7" row="2" col="0"></button></div>
+                    
+                    <div class="col-4 cell-container border text-center"><button class="btn cell-btn cell" id="cell-8" row="2" col="1"></button></div>
+                    
+                    <div class="col-4 cell-container border bottom-right-cell text-center"><button class="btn cell-btn cell" id="cell-9" row="2" col="2"></button></div>
+                </div>
+                
+                <!-- result message: -->
+                <div class="alert alert-danger justify-content-between align-items-center row" id="result">
+                    <div class="text-danger fs-5 col-6" id="message">
+                    </div>
+                    <div class="col-6 text-end">
+                        <button class="btn btn-danger text-white rounded" id="playAgain">Play Again</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+
