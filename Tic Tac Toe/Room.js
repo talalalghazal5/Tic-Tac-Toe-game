@@ -27,7 +27,7 @@ export class Room {
         if (Object.keys(this.users).length !== 2) {
             throw new Error("Insufficient number of players");
         }
-        this.game = new Game();
+        this.game = new Game(Object.values(this.users));
         this.isPlaying = true;
     }
 }
