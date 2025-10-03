@@ -57,9 +57,9 @@ function HandleMessageRecieved(ws, msg) {
                 ws.send(JSON.stringify({ room: room }))
                 break;
 
-            // case 'makeMove':
-            //     roomsRuntime.makeMove(data.roomId, ws.user, data.move);
-            //     break;
+            case 'setReady':
+                roomsRuntime.setPlayerReady(data.roomId, ws.user, data.isReady);
+                break;
 
             case 'leaveRoom':
                 roomsRuntime.leaveRoom(data.roomId, ws.user);

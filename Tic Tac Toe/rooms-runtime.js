@@ -1,14 +1,14 @@
-import { Game } from "./game.js";
+import { Room } from "./Room.js";
 
 // map id to object
 let rooms = new Map();
 
-function getRoom(roomId){
+function getRoom(roomId) {
     return rooms.get(roomId);
 }
 
-function newRoom(user) {    
-    let room = new Room(user);    
+function newRoom(user) {
+    let room = new Room(user);
     rooms.set(room.id, room);
     return room;
 }
@@ -19,56 +19,40 @@ function joinRoom(roomId, user) {
     return room;
 }
 
-function makeMove(roomId, user, move) {
-    let room = rooms.get(roomId);
-    if(room.isPlaying == true){
-        room.game.playMove(user, move);
-    }else{
-        throw new Error("No game has started")
-    }
-}
-
 function leaveRoom(roomId, user) {
     let room = rooms.get(roomId);
     room.removeUser(user);
+}
+
+function setPlayerReady(roomId, user, isReady) {
+    let room = rooms.get(roomId);
+    if (room.isPlaying == true) {
+        throw new Error("Game has started")
+    } else {
+        user.isReady = isReady;
+    }
+
+    let players = Object.values(room.users);
+    if (players.length == 2 && players.every(player => player.isReady == true)) {
+        room.startGame();
+    }
+
+}
+
+function makeMove(roomId, user, move) {
+    let room = rooms.get(roomId);
+    if (room.isPlaying == true) {
+        room.game.playMove(user, move);
+    } else {
+        throw new Error("No game has started")
+    }
 }
 
 export default {
     getRoom,
     newRoom,
     joinRoom,
+    leaveRoom,
     makeMove,
-    leaveRoom
-}
-
-class Room {
-    static nextRoomId = 1;
-    constructor(user) {
-        this.id = Room.nextRoomId;
-        Room.nextRoomId++;
-
-        this.users = {};
-        this.users[user.id] = user;
-
-        this.isPlaying = false;
-    }
-
-    addUser(user) {
-        if (Object.keys(this.users).length >= 2) {
-            throw new Error("This room is full");
-        }
-        this.users[user.id] = user;
-    }
-
-    removeUser(user) {
-        delete this.users[user.id];
-    }
-
-    startGame(){
-        if(Object.keys(this.users).length !== 2){
-            throw new Error("Insufficient number of players");
-        }
-        this.game = new Game();
-        this.isPlaying = true;
-    }
+    setPlayerReady
 }
