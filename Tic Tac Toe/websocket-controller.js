@@ -16,7 +16,7 @@ function HandleClientConnected(ws) {
         id: ws.user.id,
         username: ws.user.username
     };
-    console.log(`new user connected, user details: ${user}`);
+    console.log(`new user connected, user details: ${JSON.stringify(user)}`);
 
     ws.send(JSON.stringify(user));
 
@@ -42,6 +42,13 @@ function HandleMessageRecieved(ws, msg) {
                 ws.send(JSON.stringify({ message: "Username updated successfuly" }))
                 break;
 
+            case 'getRooms':
+                var rooms = roomsRuntime.getRooms();
+                console.log(rooms);
+                
+                ws.send(JSON.stringify({ rooms: rooms }))
+                break;
+
             case 'getRoom':
                 var room = roomsRuntime.getRoom(data.roomId);
                 ws.send(JSON.stringify({ room: room }))
@@ -49,7 +56,7 @@ function HandleMessageRecieved(ws, msg) {
 
             case 'newRoom':
                 var room = roomsRuntime.newRoom(ws.user);
-                ws.send(JSON.stringify({ room: room }))
+                ws.send(JSON.stringify({ type: 'playerRoom', room: room }))
                 break;
 
             case 'joinRoom':
@@ -58,11 +65,11 @@ function HandleMessageRecieved(ws, msg) {
                 break;
 
             case 'setReady':
-                roomsRuntime.setPlayerReady(data.roomId, ws.user, data.isReady);
+                roomsRuntime.setPlayerReady(ws.user, data.isReady);
                 break;
 
             case 'leaveRoom':
-                roomsRuntime.leaveRoom(data.roomId, ws.user);
+                roomsRuntime.leaveRoom(ws.user);
                 break;
 
             default:
