@@ -1,66 +1,41 @@
 import { eventBus } from "./events.js"
 
-function setUsername(newUsername) {
-    let data = {
-        method: "setUsername",
-        username: newUsername
-    };
-    let customEvent = new CustomEvent('SendMessage', { detail: data });
+function sendMessage(method, extraData = {}) {
+    const data = { method, ...extraData };
+    const customEvent = new CustomEvent('SendMessage', { detail: data });
     eventBus.dispatchEvent(customEvent);
+}
+
+function setUsername(newUsername) {
+    sendMessage("setUsername", { username: newUsername });
 }
 
 function getUserDetails() {
-    let data = {
-        method: "getUserDetails"
-    };
-    let customEvent = new CustomEvent('SendMessage', { detail: data });
-    eventBus.dispatchEvent(customEvent);
+    sendMessage("getUserDetails");
 }
 
-function getRooms(params) {
-    let data = {
-        method: "getRooms"
-    };
-    let customEvent = new CustomEvent('SendMessage', { detail: data });
-    eventBus.dispatchEvent(customEvent);
+function getRooms() {
+    sendMessage("getRooms");
 }
 
 function newRoom() {
-    let data = {
-        method: "newRoom"
-    };
-    let customEvent = new CustomEvent('SendMessage', { detail: data });
-    eventBus.dispatchEvent(customEvent);
+    sendMessage("newRoom");
 }
 
 function joinRoom(roomId) {
-    let data = {
-        method: "joinRoom",
-        roomId: roomId
-    };
-    let customEvent = new CustomEvent('SendMessage', { detail: data });
-    eventBus.dispatchEvent(customEvent);
+    sendMessage("joinRoom", { roomId });
 }
 
 function leaveRoom() {
-    let data = {
-        method: "leaveRoom"
-    };
-    let customEvent = new CustomEvent('SendMessage', { detail: data });
-    eventBus.dispatchEvent(customEvent);
+    sendMessage("leaveRoom");
 }
 
-function setReady(params) {
-  //todo
+function setReady(isReady) {
+    sendMessage("setReady", { isReady });
 }
 
-function playMove(move) {//todo
-    let data = {
-        method: "playMove",
-        move: move
-    };
-    let customEvent = new CustomEvent('SendMessage', { detail: data });
-    eventBus.dispatchEvent(customEvent);
+function playMove(move) {
+    sendMessage("makeMove", { move });
 }
 
 export default {
