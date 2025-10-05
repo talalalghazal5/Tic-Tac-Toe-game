@@ -18,7 +18,7 @@ function HandleClientConnected(ws) {
     };
     console.log(`new user connected, user details: ${JSON.stringify(user)}`);
 
-    ws.send(JSON.stringify(user));
+    ws.send(JSON.stringify({ type: "userDataUpdate", user }));
 
     nextClientId++;
 }
@@ -32,20 +32,20 @@ function HandleMessageRecieved(ws, msg) {
         switch (data.method) {
             case 'getUserDetails':
                 ws.send(JSON.stringify({
-                    id: ws.user.id,
-                    username: ws.user.username
+                    type: "userDataUpdate",
+                    user: ws.user
                 }));
                 break;
 
             case 'setUsername':
                 ws.user.username = data.username;
-                ws.send(JSON.stringify({ message: "Username updated successfuly" }))
+                ws.send(JSON.stringify({ type: "userDataUpdate", user: ws.user }))
                 break;
 
             case 'getRooms':
                 var rooms = roomsRuntime.getRooms();
                 console.log(rooms);
-                
+
                 ws.send(JSON.stringify({ rooms: rooms }))
                 break;
 
@@ -56,7 +56,7 @@ function HandleMessageRecieved(ws, msg) {
 
             case 'newRoom':
                 var room = roomsRuntime.newRoom(ws.user);
-                ws.send(JSON.stringify({ type: 'playerRoom', room: room }))
+                ws.send(JSON.stringify({ type: 'playerRoomUpdate', room: room }))
                 break;
 
             case 'joinRoom':
@@ -72,6 +72,10 @@ function HandleMessageRecieved(ws, msg) {
                 roomsRuntime.leaveRoom(ws.user);
                 break;
 
+            case 'makeMove':
+                roomsRuntime.makeMove(ws.user, data.move);
+                break;
+
             default:
                 ws.send(JSON.stringify({ error: "method is not recognized" }))
                 break;
@@ -82,11 +86,22 @@ function HandleMessageRecieved(ws, msg) {
     }
 }
 
-function HandleClientDisconnected() {
-    console.log("Client Disconnected")
+function HandleClientDisconnected(ws) {
+    console.log("Client Disconnected");
+    try {
+        roomsRuntime.leaveRoom(ws.user);
+    } catch (error) {
+        // It's possible the user was not in any room; log for debugging if needed
+        // console.log("No room to leave or error:", error.message);
+    }
+
+    if (ws.user && ws.user.id) {
+        clients.delete(ws.user.id);
+    }
 }
 
-export default {
+export {
+    clients,
     HandleClientConnected,
     HandleMessageRecieved,
     HandleClientDisconnected

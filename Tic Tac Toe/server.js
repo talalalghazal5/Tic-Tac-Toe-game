@@ -1,6 +1,6 @@
 import express from "express";
 import expressWs from "express-ws";
-import websocketController from "./websocket-controller.js";
+import { HandleClientConnected, HandleMessageRecieved, HandleClientDisconnected } from "./websocket-controller.js";
 
 const port = 3000;
 const app = express();
@@ -11,14 +11,14 @@ app.get("/", (req, res) => {
 });
 
 app.ws('/ws', (ws, req) => {
-    websocketController.HandleClientConnected(ws);
+    HandleClientConnected(ws);
 
     ws.on('message', (msg) => {
-        websocketController.HandleMessageRecieved(ws, msg);
+        HandleMessageRecieved(ws, msg);
     })
 
     ws.on('close', () => {
-        websocketController.HandleClientDisconnected();
+        HandleClientDisconnected(ws);
     })
 })
 
