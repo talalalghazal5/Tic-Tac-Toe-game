@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alata&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Document</title>
+    <script type="module" src="../js/ui.js"></script>
+    <script type="module" src="../js/api.js"></script>
+    <script type="module" src="../js/websocket.js"></script>
+    <script type="module" src="../js/events.js"></script>
+  </head>
+  <body>
+    <!-- the game board: -->
+    <div class="container min-vh-100 ps-5 pe-5">
+      <div class="row min-vh-100 justify-content-center align-content-center">
+        <h1 class="text-center text-white mb-5">
+          Let's play some Tic-Tac-Toe!
+        </h1>
+        <div class="row mb-5">
+          <div class="col-4 cell-container border top-left-cell text-center">
+            <button
+              class="btn cell-btn cell"
+              id="cell-1"
+              row="0"
+              col="0"
+            ></button>
+          </div>
+
+          <div class="col-4 cell-container border text-center">
+            <button
+              class="btn cell-btn cell"
+              id="cell-2"
+              row="0"
+              col="1"
+            ></button>
+          </div>
+
+          <div class="col-4 cell-container border top-right-cell text-center">
+            <button
+              class="btn cell-btn cell"
+              id="cell-3"
+              row="0"
+              col="2"
+            ></button>
+          </div>
+
+          <div class="col-4 cell-container border text-center">
+            <button
+              class="btn cell-btn cell"
+              id="cell-4"
+              row="1"
+              col="0"
+            ></button>
+          </div>
+
+          <div class="col-4 cell-container border text-center">
+            <button
+              class="btn cell-btn cell"
+              id="cell-5"
+              row="1"
+              col="1"
+            ></button>
+          </div>
+
+          <div class="col-4 cell-container border text-center">
+            <button
+              class="btn cell-btn cell"
+              id="cell-6"
+              row="1"
+              col="2"
+            ></button>
+          </div>
+
+          <div class="col-4 cell-container border bottom-left-cell text-center">
+            <button
+              class="btn cell-btn cell"
+              id="cell-7"
+              row="2"
+              col="0"
+            ></button>
+          </div>
+
+          <div class="col-4 cell-container border text-center">
+            <button
+              class="btn cell-btn cell"
+              id="cell-8"
+              row="2"
+              col="1"
+            ></button>
+          </div>
+
+          <div
+            class="col-4 cell-container border bottom-right-cell text-center"
+          >
+            <button
+              class="btn cell-btn cell"
+              id="cell-9"
+              row="2"
+              col="2"
+            ></button>
+          </div>
+        </div>
+
+        <!-- result message: -->
+        <div
+          class="alert alert-danger justify-content-between align-items-center row"
+          id="result"
+        >
+          <div class="text-danger fs-5 col-6" id="message"></div>
+          <div class="col-6 text-end">
+            <button class="btn btn-danger text-white rounded" id="playAgain">
+              Play Again
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 text-end">
+      <div class="d-flex text-white">
+        user ID:&nbsp;
+        <div id="userId"></div>
+      </div>
+      <div class="d-flex text-white">
+        username:&nbsp;
+        <div id="username"></div>
+      </div>
+      <div class="d-flex text-white">
+        players in room:&nbsp;
+        <div id="numberOfPlayersInRoom"></div>
+      </div>
+      <div class="d-flex text-white">
+        <div id="numberOfReadyPlayers"></div>
+        &nbsp;players are ready 
+      </div>
+      <div class="d-flex text-white">
+        your room id:&nbsp;
+        <div id="roomId"></div>
+      </div>
+      <button class="btn btn-danger text-white rounded" id="setUsername">
+        set username
+      </button>
+      <button class="btn btn-danger text-white rounded" id="getDetails">
+        getDetails
+      </button>
+      <button class="btn btn-danger text-white rounded" id="getRooms">
+        getRooms
+      </button>
+      <button class="btn btn-danger text-white rounded" id="newRoom">
+        newRoom
+      </button>
+      <button class="btn btn-danger text-white rounded" id="joinRoom">
+        joinRoom
+      </button>
+      <button class="btn btn-danger text-white rounded" id="leaveRoom">
+        leaveRoom
+      </button>
+      <button class="btn btn-danger text-white rounded" id="ready">
+        ready
+      </button>
+      <button class="btn btn-danger text-white rounded" id="notReady">
+        not ready
+      </button>
+    </div>
+  </body>
+</html>
